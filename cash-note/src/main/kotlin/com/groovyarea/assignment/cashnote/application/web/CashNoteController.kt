@@ -2,6 +2,7 @@ package com.groovyarea.assignment.cashnote.application.web
 
 import com.groovyarea.assignment.cashnote.application.dto.AgreeConnectionCheckRequest
 import com.groovyarea.assignment.cashnote.application.dto.AgreeConnectionCheckResponse
+import com.groovyarea.assignment.cashnote.application.dto.AgreeDataTransferRequest
 import com.groovyarea.assignment.cashnote.application.service.CashNoteApplicationService
 import com.groovyarea.assignment.cashnote.common.dto.response.ResponseDTO
 import jakarta.validation.Valid
@@ -29,5 +30,20 @@ class CashNoteController(
         )
 
         return ResponseDTO.success(data = result)
+    }
+
+    /**
+     * 데이터 제공 동의 API
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/api/v1/agree-data-transfer")
+    fun agreementDataTransfer(
+        @Valid @RequestBody request: AgreeDataTransferRequest,
+    ): ResponseDTO<Unit> {
+        cashNoteApplicationService.agreeDataTransfer(
+            request = request
+        )
+
+        return ResponseDTO.success()
     }
 }

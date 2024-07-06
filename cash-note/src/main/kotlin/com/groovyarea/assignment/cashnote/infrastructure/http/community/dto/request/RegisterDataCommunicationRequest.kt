@@ -2,5 +2,5 @@ package com.groovyarea.assignment.cashnote.infrastructure.http.community.dto.req
 
 data class RegisterDataCommunicationRequest(
     val registrationNumber: String,
-    val agreedType: String,
+    val agreedType: String = "Y",
 )

@@ -1,6 +1,8 @@
 package com.groovyarea.assignment.cashnote.domain.service
 
+import com.groovyarea.assignment.cashnote.common.exception.NotFoundException
 import com.groovyarea.assignment.cashnote.domain.entity.table.ConnectionAgreement
+import com.groovyarea.assignment.cashnote.domain.exception.NOT_FOUND_CONNECTION_AGREEMENT
 import com.groovyarea.assignment.cashnote.infrastructure.db.jpa.repository.ConnectionAgreementRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -10,6 +12,15 @@ import java.time.LocalDateTime
 class ConnectionAgreementService(
     private val connectionAgreementRepository: ConnectionAgreementRepository,
 ) {
+
+    @Transactional(readOnly = true)
+    fun getAgreement(
+        registrationNumber: String,
+    ): ConnectionAgreement {
+        return connectionAgreementRepository.findByRegistrationNumber(
+            registrationNumber = registrationNumber
+        ) ?: throw NotFoundException(message = NOT_FOUND_CONNECTION_AGREEMENT)
+    }
 
     @Transactional
     fun agree(
