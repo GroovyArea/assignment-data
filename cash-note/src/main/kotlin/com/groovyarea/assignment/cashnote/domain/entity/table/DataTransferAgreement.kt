@@ -7,11 +7,14 @@ import jakarta.persistence.Table
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "data_provide_agreements")
-class DataProvideAgreement(
+@Table(name = "data_transfer_agreements")
+class DataTransferAgreement(
     @Column(name = "registration_number")
     val registrationNumber: String,
 
-    @Column(name = "agreed_at")
-    var agreedAt: LocalDateTime,
+    @Column(name = "is_data_transfer_agreed")
+    val isDataTransferAgreed: Boolean,
+
+    @Column(name = "data_transfer_agreed_at")
+    var dataTransferAgreedAt: LocalDateTime,
 ) : EntityBase()
