@@ -23,4 +23,8 @@ class ConnectionAgreement(
         this.isConnectionAgreed = true
         this.connectionAgreedAt = LocalDateTime.now()
     }
+
+    fun isNotAgreed(): Boolean {
+        return !this.isConnectionAgreed
+    }
 }

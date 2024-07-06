@@ -13,8 +13,8 @@ class DataTransferAgreement(
     val registrationNumber: String,
 
     @Column(name = "is_data_transfer_agreed")
-    val isDataTransferAgreed: Boolean,
+    val isDataTransferAgreed: Boolean = true,
 
     @Column(name = "data_transfer_agreed_at")
-    var dataTransferAgreedAt: LocalDateTime,
+    var dataTransferAgreedAt: LocalDateTime = LocalDateTime.now(),
 ) : EntityBase()
