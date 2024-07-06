@@ -11,13 +11,21 @@ plugins {
 apply(plugin = "org.jetbrains.kotlin.plugin.spring")
 
 group = "com.groovyarea.assignment-data"
-version = ConstantDataReceiver.VERSION
+version = ConstantDataTransfer.VERSION
 java.sourceCompatibility = JavaVersion.toVersion(Dependency.targetJvmVersion)
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${Dependency.springCloudVersion}")
+    }
+}
 
 dependencies {
 
-    // Spring Kafka
-    implementation("org.springframework.kafka:spring-kafka")
+    // OpenFeign
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    implementation("io.github.openfeign:feign-okhttp:${Dependency.openFeignVersion}")
+    implementation("io.github.openfeign:feign-jackson:${Dependency.openFeignVersion}")
 }
 
 

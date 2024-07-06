@@ -1,0 +1,17 @@
+object Dependency {
+    const val targetJvmVersion = "21"
+    const val kotlinVersion = "1.9.21"
+    const val springBootVersion = "3.2.1"
+    const val springCloudVersion = "2023.0.0"
+    const val restdocsapiSpecVersion = "0.19.2"
+    const val coroutineVersion = "1.7.2"
+    const val openFeignVersion = "12.2"
+    const val mySQLConnectorVersion = "8.0.32"
+    const val kotestVersion = "5.6.1"
+    const val kotestSprintExtensions = "1.1.3"
+    const val mockkVersion = "1.13.5"
+    const val springMockkVersion = "4.0.2"
+    const val mapstructVersion = "1.5.5.Final"
+    const val dependencyManagementVersion = "1.1.0"
+    const val detektVersion = "1.23.4"
+}
