@@ -1,8 +1,8 @@
 package com.groovyarea.assignment.datatransfer.infrastructure.http.config
 
-import com.groovyarea.assignment.cashnote.infrastructure.http.CustomErrorDecoder
-import com.groovyarea.assignment.cashnote.infrastructure.http.FeignClientCustomLogger
-import com.groovyarea.assignment.cashnote.infrastructure.http.TraceHeaderInterceptor
+import com.groovyarea.assignment.datatransfer.infrastructure.http.CustomErrorDecoder
+import com.groovyarea.assignment.datatransfer.infrastructure.http.FeignClientCustomLogger
+import com.groovyarea.assignment.datatransfer.infrastructure.http.TraceHeaderInterceptor
 import feign.Logger
 import feign.Retryer
 import feign.codec.ErrorDecoder
