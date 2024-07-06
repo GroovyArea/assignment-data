@@ -8,8 +8,11 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 @Entity
-@Table(name = "receive_card_trasactions")
-class ReceiveCardTransaction(
+@Table(name = "card_trasactions")
+class CardTransaction(
+
+    @Column(name = "registration_number")
+    val registrationNumber: String,
 
     @Column(name = "card_transaction_number")
     val cardTransactionNumber: Int,

@@ -24,4 +24,7 @@ interface CommunityClient {
     fun registerDataCommunication(
         @RequestBody request: RegisterDataCommunicationRequest,
     )
+
+    @PostMapping("/card-transactions")
+    fun sendCardTransactions()
 }
