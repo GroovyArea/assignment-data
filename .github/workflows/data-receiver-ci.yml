@@ -1,7 +1,7 @@
 name: CI (data-receiver)
 on:
   push:
-    branches:
+    branches-ignore:
       - main
 
 jobs:

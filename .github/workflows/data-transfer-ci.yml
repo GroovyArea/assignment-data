@@ -1,7 +1,7 @@
 name: CI (data-transfer)
 on:
   push:
-    branches:
+    branches-ignore:
       - main
 
 jobs:
