@@ -1,4 +1,4 @@
-name: CI (data-receiver)
+name: CI (data-transfer)
 on:
   push:
     branches:
