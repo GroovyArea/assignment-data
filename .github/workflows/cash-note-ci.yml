@@ -1,4 +1,4 @@
-name: CI (data-receiver)
+name: CI (cash-note)
 on:
   push:
     branches-ignore:

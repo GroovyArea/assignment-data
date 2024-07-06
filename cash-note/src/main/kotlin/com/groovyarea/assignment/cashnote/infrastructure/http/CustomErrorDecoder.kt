@@ -16,13 +16,15 @@ class CustomErrorDecoder : ErrorDecoder {
             HttpStatus.GATEWAY_TIMEOUT.value()
         )
 
+        val retryAfter: Long? = null
+
         return when (response.status()) {
             in retryStatus -> RetryableException(
                 response.status(),
                 exception.message,
                 response.request().httpMethod(),
                 exception,
-                null,
+                retryAfter,
                 response.request()
             )
             else -> exception

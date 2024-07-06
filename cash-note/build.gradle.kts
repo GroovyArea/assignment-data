@@ -14,6 +14,12 @@ group = "com.groovyarea.assignment-data"
 version = ConstantCashNote.VERSION
 java.sourceCompatibility = JavaVersion.toVersion(Dependency.targetJvmVersion)
 
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${Dependency.springCloudVersion}")
+    }
+}
+
 dependencies {
 
     // OpenFeign
