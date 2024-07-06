@@ -1,4 +1,8 @@
-rootProject.name = "assignment"
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
+}
 
-include("data-transfer")
+rootProject.name = "assignment-data"
+
 include("data-receiver")
+include("data-transfer")

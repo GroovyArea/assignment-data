@@ -1,4 +1,4 @@
-name: CI (data-transfer)
+name: CI (data-receiver)
 on:
   push:
     branches-ignore:
@@ -19,4 +19,4 @@ jobs:
           cache: 'gradle'
 
       - name: Build
-        run: ./gradlew -s :data-transfer:build --stacktrace --no-daemon
+        run: ./gradlew -s :data-receiver:build --stacktrace --no-daemon
