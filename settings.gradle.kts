@@ -6,3 +6,4 @@ rootProject.name = "assignment-data"
 
 include("data-receiver")
 include("data-transfer")
+include("cash-note")
