@@ -1,18 +1,12 @@
 package com.groovyarea.assignment.datatransfer.infrastructure.http.community.client
 
 import com.groovyarea.assignment.datatransfer.infrastructure.http.community.dto.request.CardTransactionRequest
-import com.groovyarea.assignment.datatransfer.infrastructure.http.config.DefaultConfig
-import org.springframework.cloud.openfeign.FeignClient
-import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.service.annotation.PostExchange
 
-@FeignClient(
-    name = "community-client",
-    configuration = [DefaultConfig::class]
-)
 interface CommunityClient {
 
-    @PostMapping("/card-transactions")
+    @PostExchange("/card-transactions")
     fun sendCardTransactions(
         @RequestBody request: List<CardTransactionRequest>,
     )

@@ -11,19 +11,9 @@ spring:
   jpa:
     show-sql: true
 
-  cloud:
-    openfeign:
-      okhttp:
-        enabled: true
-      client:
-        config:
-          default:
-            logger-level: full
-            connect-timeout: 1000
-            read-timeout: 3000
-          community-client:
-            url: ""
-            dismiss404: true
+external:
+  community:
+    url: ""
 
 springdoc:
   swagger-ui:

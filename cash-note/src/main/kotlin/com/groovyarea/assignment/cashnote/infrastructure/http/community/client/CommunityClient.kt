@@ -2,29 +2,23 @@ package com.groovyarea.assignment.cashnote.infrastructure.http.community.client
 
 import com.groovyarea.assignment.cashnote.infrastructure.http.community.dto.request.RegisterDataCommunicationRequest
 import com.groovyarea.assignment.cashnote.infrastructure.http.community.dto.response.HasBusinessResponse
-import com.groovyarea.assignment.cashnote.infrastructure.http.config.DefaultConfig
-import org.springframework.cloud.openfeign.FeignClient
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.service.annotation.GetExchange
+import org.springframework.web.service.annotation.PostExchange
 
-@FeignClient(
-    name = "community-client",
-    configuration = [DefaultConfig::class]
-)
 interface CommunityClient {
 
-    @GetMapping("/has-business")
+    @GetExchange("/has-business")
     fun hasBusiness(
         @RequestParam registrationNumber: String,
     ): HasBusinessResponse
 
-    @PostMapping("/register-data-communication")
+    @PostExchange("/register-data-communication")
     fun registerDataCommunication(
         @RequestBody request: RegisterDataCommunicationRequest,
     )
 
-    @PostMapping("/card-transactions")
+    @PostExchange("/card-transactions")
     fun sendCardTransactions()
 }
