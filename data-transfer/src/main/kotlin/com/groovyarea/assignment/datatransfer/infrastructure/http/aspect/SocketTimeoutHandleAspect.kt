@@ -13,7 +13,7 @@ import kotlin.reflect.full.primaryConstructor
 @Aspect
 class SocketTimeoutHandleAspect {
 
-    @Pointcut("@annotation(com.groovyarea.assignment.cashnote.infrastructure.http.aspect.SocketTimeoutHandle)")
+    @Pointcut("@annotation(com.groovyarea.assignment.datatransfer.infrastructure.http.aspect.SocketTimeoutHandle)")
     fun socketTimeoutHandle() = Unit
 
     @Around("socketTimeoutHandle()")

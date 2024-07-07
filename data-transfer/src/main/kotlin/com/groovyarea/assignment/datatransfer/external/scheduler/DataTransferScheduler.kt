@@ -22,7 +22,7 @@ class DataTransferScheduler(
         private const val CARD_TRANSACTION_CHUNK_SIZE = 10
     }
 
-    @Scheduled(cron = "0 8 * * * ")
+    @Scheduled(cron = "0 0 8 * * *")
     fun sendData() {
         var currentDataTransferAgreementPageNumber = 0
         var transferAbleFlag = true

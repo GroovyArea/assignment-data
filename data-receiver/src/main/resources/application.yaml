@@ -1,0 +1,41 @@
+server:
+  port: 8002
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/assignment
+    username: root
+    password: 1234
+
+  jpa:
+    show-sql: true
+
+  kafka:
+    bootstrap-servers:
+      - localhost:9091
+      - localhost:9092
+    consumer:
+      client-id: data-receiver-consumer
+      group-id: data-receiver
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring:
+          deserializer.value.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+          json:
+            trusted.packages: "*"
+    properties:
+      sasl.mechanism: PLAIN
+      request.timeout.ms: 20000
+      retry.backoff.ms: 500
+
+
+kafka-topic:
+  card-payment-transaction: "card-payment-transaction"
+
+springdoc:
+  swagger-ui:
+    path: /api-docs
+    url: /docs/swagger.yaml

@@ -20,7 +20,10 @@ class ReceiveCardTransactionConsumer(
 
     companion object : Log
 
-    @KafkaListener(topics = ["transactions"], clientIdPrefix = "received-card-transactions-consumer")
+    @KafkaListener(
+        topics = ["\${kafka-topic.card-payment-transaction}"],
+        clientIdPrefix = "receive-card-transactions-consumer"
+    )
     fun consumeCardTransaction(
         @Payload payload: String,
     ) {
