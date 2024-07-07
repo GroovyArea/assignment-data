@@ -14,21 +14,6 @@ group = "com.groovyarea.assignment-data"
 version = ConstantDataTransfer.VERSION
 java.sourceCompatibility = JavaVersion.toVersion(Dependency.targetJvmVersion)
 
-dependencyManagement {
-    imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${Dependency.springCloudVersion}")
-    }
-}
-
-dependencies {
-
-    // OpenFeign
-    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
-    implementation("io.github.openfeign:feign-okhttp:${Dependency.openFeignVersion}")
-    implementation("io.github.openfeign:feign-jackson:${Dependency.openFeignVersion}")
-}
-
-
 tasks {
     withType<KotlinCompile> {
         kotlinOptions {
