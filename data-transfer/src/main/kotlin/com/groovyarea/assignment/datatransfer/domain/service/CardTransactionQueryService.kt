@@ -19,7 +19,6 @@ class CardTransactionQueryService(
         val pagedCardTransactions =
             cardTransactionRepository.findAllByRegistrationNumberAndCreatedAtGreaterThanEqual(
                 registrationNumber = registrationNumber,
-
                 createdAt = dayBeforeDatetime
             )
 
