@@ -55,10 +55,12 @@ class DataTransferApplicationService(
                     transactionAbleFlag = false
                 } else {
                     currentCardTransactionPageNumber = pagedCardTransactions.nextPageNumber
+
                     val cardTransactions = pagedCardTransactions.contents
                     sendData(
                         cardTransactions = cardTransactions
                     )
+
                     val lastCardTransactionNumber = cardTransactions.last().cardTransactionNumber
                     logger.info(
                         "과거 6개월 카드 데이터 송신 성공 | 마지막 송신 카드 번호 : $lastCardTransactionNumber | 사업자 번호 : $registrationNumber"
