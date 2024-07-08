@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class CashNoteApplicationService(
+    private val dataTransferApplicationService: DataTransferApplicationService,
     private val communityService: CommunityService,
     private val connectionAgreementService: ConnectionAgreementService,
     private val dataTransferAgreementService: DataTransferAgreementService,
@@ -55,6 +56,9 @@ class CashNoteApplicationService(
                 registerDataCommunicationRequest = registerDataCommunicationRequest
             )
             dataTransferAgreementService.agree(
+                registrationNumber = registrationNumber
+            )
+            dataTransferApplicationService.transferFirstData(
                 registrationNumber = registrationNumber
             )
         }

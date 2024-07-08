@@ -1,4 +1,4 @@
-package com.groovyarea.assignment.datatransfer.common.pagination
+package com.groovyarea.assignment.cashnote.common.pagination
 
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort

@@ -1,5 +1,6 @@
 package com.groovyarea.assignment.cashnote.infrastructure.http.community.client
 
+import com.groovyarea.assignment.cashnote.infrastructure.http.community.dto.request.CardTransactionRequest
 import com.groovyarea.assignment.cashnote.infrastructure.http.community.dto.request.RegisterDataCommunicationRequest
 import com.groovyarea.assignment.cashnote.infrastructure.http.community.dto.response.HasBusinessResponse
 import org.springframework.web.bind.annotation.RequestBody
@@ -20,5 +21,7 @@ interface CommunityClient {
     )
 
     @PostExchange("/card-transactions")
-    fun sendCardTransactions()
+    fun sendCardTransactions(
+        @RequestBody request: List<CardTransactionRequest>,
+    )
 }
