@@ -5,4 +5,3 @@ import com.groovyarea.assignment.cashnote.domain.entity.table.DataTransferAgreem
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface DataTransferAgreementRepository : JpaRepository<DataTransferAgreement, ID>
-x
