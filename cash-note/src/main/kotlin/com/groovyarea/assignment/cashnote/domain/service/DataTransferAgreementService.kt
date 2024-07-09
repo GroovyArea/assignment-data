@@ -10,7 +10,6 @@ class DataTransferAgreementService(
     private val dataTransferAgreementRepository: DataTransferAgreementRepository,
 ) {
 
-    @Transactional
     fun agree(
         registrationNumber: String,
     ) {
