@@ -1,0 +1,155 @@
+openapi: 3.0.1
+info:
+  title: Cash Note
+  description: Cash Note API
+  version: 1.0.0
+servers:
+- url: http://localhost:8000
+tags: []
+paths:
+  /api/v1/agree-connection-checks:
+    post:
+      tags:
+      - Cash Note
+      operationId: Cash Note 간편 연결 확인 동의 API
+      requestBody:
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/CashNoteAgreeConnectionChecksRequest'
+            examples:
+              Cash Note 간편 연결 확인 동의 API:
+                value: |-
+                  {
+                    "registrationNumber" : "909-23-23421"
+                  }
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CashNoteAgreeConnectionChecksResponse'
+              examples:
+                Cash Note 간편 연결 확인 동의 API:
+                  value: |-
+                    {
+                      "meta" : {
+                        "code" : "20000000",
+                        "type" : "success",
+                        "message" : null
+                      },
+                      "data" : {
+                        "result" : true
+                      }
+                    }
+  /api/v1/agree-data-transfer:
+    post:
+      tags:
+      - Cash Note
+      operationId: Cash Note 데이터 제공 동의 API
+      requestBody:
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/CashNoteAgreeDataTransferRequest'
+            examples:
+              Cash Note 데이터 제공 동의 API:
+                value: |-
+                  {
+                    "registrationNumber" : "909-23-23421"
+                  }
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CashNoteAgreeDataTransferResponse'
+              examples:
+                Cash Note 데이터 제공 동의 API:
+                  value: |-
+                    {
+                      "meta" : {
+                        "code" : "20000000",
+                        "type" : "success",
+                        "message" : null
+                      },
+                      "data" : null
+                    }
+components:
+  schemas:
+    CashNoteAgreeConnectionChecksRequest:
+      title: CashNoteAgreeConnectionChecksRequest
+      required:
+      - registrationNumber
+      type: object
+      properties:
+        registrationNumber:
+          type: string
+          description: 사업자 번호
+    CashNoteAgreeDataTransferRequest:
+      title: CashNoteAgreeDataTransferRequest
+      required:
+      - registrationNumber
+      type: object
+      properties:
+        registrationNumber:
+          type: string
+          description: 사업자 번호
+    CashNoteAgreeDataTransferResponse:
+      title: CashNoteAgreeDataTransferResponse
+      required:
+      - meta
+      type: object
+      properties:
+        meta:
+          required:
+          - code
+          type: object
+          properties:
+            code:
+              type: string
+              description: MetaCode
+            message:
+              type: string
+              description: Error Message
+              nullable: true
+            type:
+              type: string
+              description: MetaCode name
+              nullable: true
+          description: Meta
+    CashNoteAgreeConnectionChecksResponse:
+      title: CashNoteAgreeConnectionChecksResponse
+      required:
+      - data
+      - meta
+      type: object
+      properties:
+        data:
+          required:
+          - result
+          type: object
+          properties:
+            result:
+              type: boolean
+              description: 간편 연결 가능 여부
+          description: result Data
+        meta:
+          required:
+          - code
+          type: object
+          properties:
+            code:
+              type: string
+              description: MetaCode
+            message:
+              type: string
+              description: Error Message
+              nullable: true
+            type:
+              type: string
+              description: MetaCode name
+              nullable: true
+          description: Meta
