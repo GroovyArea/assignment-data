@@ -20,7 +20,6 @@ dependencies {
     implementation("org.springframework.kafka:spring-kafka")
 }
 
-
 tasks {
     withType<KotlinCompile> {
         kotlinOptions {

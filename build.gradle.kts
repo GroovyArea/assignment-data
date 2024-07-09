@@ -79,20 +79,10 @@ allprojects {
         testImplementation("io.kotest:kotest-runner-junit5:${Dependency.kotestVersion}")
         testImplementation("io.kotest.extensions:kotest-extensions-spring:${Dependency.kotestSprintExtensions}")
         testImplementation("io.mockk:mockk:${Dependency.mockkVersion}")
-        testImplementation("com.ninja-squad:springmockk:${Dependency.springMockkVersion}")
 
         // test
-        testImplementation("org.springframework.boot:spring-boot-starter-test")
         testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
         testImplementation("org.mockito:mockito-inline:5.2.0")
-        testImplementation("com.h2database:h2")
-
-        // restdocs
-        testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
-        testImplementation("com.epages:restdocs-api-spec-mockmvc:${Dependency.restdocsapiSpecVersion}")
-        testImplementation("com.epages:restdocs-api-spec-model:${Dependency.restdocsapiSpecVersion}")
-
-        kaptTest("org.mapstruct:mapstruct-processor:${Dependency.mapstructVersion}.Final")
     }
 
 
