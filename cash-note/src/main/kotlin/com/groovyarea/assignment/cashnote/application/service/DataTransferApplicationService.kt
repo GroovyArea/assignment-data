@@ -10,7 +10,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.coroutines.yield
 import org.springframework.stereotype.Service
 import java.time.Duration
 import java.time.LocalDateTime
@@ -27,7 +26,7 @@ class DataTransferApplicationService(
         private const val LOOP_TIMEOUT_MINUTE: Long = 10
     }
 
-    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     fun transferFirstData(
         registrationNumber: String,
@@ -41,10 +40,10 @@ class DataTransferApplicationService(
             val loopStartTime = System.currentTimeMillis()
             val loopTimeout = Duration.ofMinutes(LOOP_TIMEOUT_MINUTE).toMillis()
 
-            while (transactionAbleFlag || (System.currentTimeMillis() - loopStartTime < loopTimeout)) {
+            while (transactionAbleFlag && (System.currentTimeMillis() - loopStartTime < loopTimeout)) {
                 val pagedCardTransactions = withContext(Dispatchers.IO) {
-                    cardTransactionQueryService.getCardTransactionsBetween(
-                        currentPageNumber = currentCardTransactionPageNumber,
+                    getPagedCardTransaction(
+                        currentCardTransactionPageNumber = currentCardTransactionPageNumber,
                         startDate = startDate,
                         endDate = endDate,
                         registrationNumber = registrationNumber
@@ -57,17 +56,18 @@ class DataTransferApplicationService(
                     currentCardTransactionPageNumber = pagedCardTransactions.nextPageNumber
 
                     val cardTransactions = pagedCardTransactions.contents
-                    sendData(
-                        cardTransactions = cardTransactions
-                    )
+
+                    withContext(Dispatchers.IO) {
+                        sendData(
+                            cardTransactions = cardTransactions
+                        )
+                    }
 
                     val lastCardTransactionNumber = cardTransactions.last().cardTransactionNumber
                     logger.info(
                         "과거 6개월 카드 데이터 송신 성공 | 마지막 송신 카드 번호 : $lastCardTransactionNumber | 사업자 번호 : $registrationNumber"
                     )
                 }
-
-                yield()
             }
         }
 
@@ -78,11 +78,21 @@ class DataTransferApplicationService(
             }
     }
 
+    private suspend fun getPagedCardTransaction(
+        currentCardTransactionPageNumber: Int,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime,
+        registrationNumber: String,
+    ) = cardTransactionQueryService.getCardTransactionsBetween(
+        currentPageNumber = currentCardTransactionPageNumber,
+        startDate = startDate,
+        endDate = endDate,
+        registrationNumber = registrationNumber
+    )
+
     private suspend fun sendData(
         cardTransactions: List<CardTransaction>,
-    ) = withContext(Dispatchers.IO) {
-        communityService.sendCardTransactions(
-            cardTransactions = cardTransactions
-        )
-    }
+    ) = communityService.sendCardTransactions(
+        cardTransactions = cardTransactions
+    )
 }
