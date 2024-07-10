@@ -1,5 +1,6 @@
 package com.groovyarea.assignment.datatransfer.external.scheduler
 
+import com.groovyarea.assignment.datatransfer.common.logback.Log
 import com.groovyarea.assignment.datatransfer.domain.service.CardTransactionQueryService
 import com.groovyarea.assignment.datatransfer.domain.service.DataTransferAgreementQueryService
 import com.groovyarea.assignment.datatransfer.external.mapper.CardTransactionMapper
@@ -18,7 +19,7 @@ class DataTransferScheduler(
     private val communityService: CommunityService,
 ) {
 
-    companion object {
+    companion object : Log {
         private const val CARD_TRANSACTION_CHUNK_SIZE = 10
     }
 
@@ -29,35 +30,57 @@ class DataTransferScheduler(
         val dayBeforeDatetime = LocalDateTime.now().minusDays(1)
 
         while (transferAbleFlag) {
-            val pagedDataTransferAgreements =
+            val pagedDataTransferAgreementsResult = runCatching {
                 dataTransferAgreementQueryService.getPagedDataTransferAgreementsOfAgreed(
                     currentPageNumber = currentDataTransferAgreementPageNumber
                 )
-
-            if (pagedDataTransferAgreements.contents.isEmpty()) {
-                transferAbleFlag = false
             }
 
-            currentDataTransferAgreementPageNumber = pagedDataTransferAgreements.nextPageNumber
+            pagedDataTransferAgreementsResult.onSuccess { pagedDataTransferAgreements ->
+                if (pagedDataTransferAgreements.contents.isEmpty()) {
+                    transferAbleFlag = false
+                } else {
+                    currentDataTransferAgreementPageNumber = pagedDataTransferAgreements.nextPageNumber
 
-            pagedDataTransferAgreements.contents.forEach { dataTransferAgreement ->
-                val registrationNumber = dataTransferAgreement.registrationNumber
+                    pagedDataTransferAgreements.contents.forEach { dataTransferAgreement ->
+                        val registrationNumber = dataTransferAgreement.registrationNumber
 
-                val yesterdayCardTransactions = cardTransactionQueryService.getDayBeforeDatetimeCardTransactions(
-                    registrationNumber = registrationNumber,
-                    dayBeforeDatetime = dayBeforeDatetime
-                )
+                        val yesterdayCardTransactionsResult = runCatching {
+                            cardTransactionQueryService.getDayBeforeDatetimeCardTransactions(
+                                registrationNumber = registrationNumber,
+                                dayBeforeDatetime = dayBeforeDatetime
+                            )
+                        }
 
-                yesterdayCardTransactions.chunked(CARD_TRANSACTION_CHUNK_SIZE).forEach {
-                    val cardTransactionRequests = it.map { cardTransaction ->
-                        CardTransactionMapper.INSTANCE.convertToRequest(
-                            cardTransaction = cardTransaction
-                        )
+                        yesterdayCardTransactionsResult.onSuccess { yesterdayCardTransactions ->
+                            yesterdayCardTransactions.chunked(CARD_TRANSACTION_CHUNK_SIZE).forEach { chunk ->
+                                val cardTransactionRequests = chunk.map { cardTransaction ->
+                                    CardTransactionMapper.INSTANCE.convertToRequest(
+                                        cardTransaction = cardTransaction
+                                    )
+                                }
+                                val sendTransactionResult = runCatching {
+                                    communityService.sendTransaction(
+                                        cardTransactionRequests = cardTransactionRequests
+                                    )
+                                }
+
+                                sendTransactionResult.onFailure { e ->
+                                    logger.error("사업자 번호 $registrationNumber 의 매출 데이터 전송 중 에러 발생", e)
+                                }
+                            }
+                        }
+
+                        yesterdayCardTransactionsResult.onFailure { e ->
+                            logger.error("사업자 번호 $registrationNumber 의 매출 데이터 조회 중 에러 발생", e)
+                        }
                     }
-                    communityService.sendTransaction(
-                        cardTransactionRequests = cardTransactionRequests
-                    )
                 }
+            }
+
+            pagedDataTransferAgreementsResult.onFailure { e ->
+                logger.error("페이지 번호 $currentDataTransferAgreementPageNumber 의 데이터 전송 동의 조회 중 에러 발생", e)
+                transferAbleFlag = false
             }
         }
     }

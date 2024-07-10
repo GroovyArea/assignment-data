@@ -44,7 +44,7 @@ class ReceiveCardTransactionConsumer(
 
         result
             .onFailure {
-                logger.error(it.message, it)
+                logger.error("공동체 매출 데이터 수신 중 예외 발생 | 예외 메시지 : ${it.message}", it)
             }
     }
 }
