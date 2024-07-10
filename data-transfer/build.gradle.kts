@@ -1,6 +1,3 @@
-import org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_ERROR
-import org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_OUT
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.springframework.boot")
@@ -9,6 +6,7 @@ plugins {
 }
 
 apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+apply(plugin = "com.epages.restdocs-api-spec")
 
 group = "com.groovyarea.assignment-data"
 version = ConstantDataTransfer.VERSION
@@ -20,26 +18,11 @@ dependencies {
         exclude(module = "mockito-core")
     }
     testImplementation("com.ninja-squad:springmockk:${Dependency.springMockkVersion}")
+
+    // restdocs
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+    testImplementation("org.springframework.restdocs:spring-restdocs-asciidoctor")
+    testImplementation("com.epages:restdocs-api-spec-mockmvc:${Dependency.restdocsapiSpecVersion}")
+    testImplementation("com.epages:restdocs-api-spec-model:${Dependency.restdocsapiSpecVersion}")
+
 }
-
-tasks {
-    withType<KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = Dependency.targetJvmVersion
-        }
-    }
-
-    withType<Test> {
-        useJUnitPlatform()
-
-        testLogging {
-            events(STANDARD_OUT, STANDARD_ERROR)
-
-            showStandardStreams = true
-            showCauses = true
-            showStackTraces = true
-        }
-    }
-}
-
