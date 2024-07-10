@@ -16,12 +16,12 @@ class CardTransactionQueryService(
         registrationNumber: String,
         dayBeforeDatetime: LocalDateTime,
     ): List<CardTransaction> {
-        val pagedCardTransactions =
+        val cardTransactions =
             cardTransactionRepository.findAllByRegistrationNumberAndCreatedAtGreaterThanEqual(
                 registrationNumber = registrationNumber,
                 createdAt = dayBeforeDatetime
             )
 
-        return pagedCardTransactions
+        return cardTransactions
     }
 }
