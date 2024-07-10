@@ -1,6 +1,5 @@
 package com.groovyarea.assignment.cashnote.domain.service
 
-import com.groovyarea.assignment.cashnote.domain.entity.table.CardTransaction
 import com.groovyarea.assignment.cashnote.domain.entity.table.ConnectionAgreement
 import com.groovyarea.assignment.cashnote.infrastructure.db.jpa.repository.ConnectionAgreementRepository
 import io.kotest.core.spec.style.BehaviorSpec
@@ -11,7 +10,6 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.mockk
 import io.mockk.verify
 import java.time.LocalDateTime
-
 
 private val repository = mockk<ConnectionAgreementRepository>()
 

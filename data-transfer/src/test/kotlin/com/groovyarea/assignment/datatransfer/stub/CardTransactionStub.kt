@@ -4,7 +4,6 @@ import com.groovyarea.assignment.datatransfer.domain.entity.table.CardTransactio
 import java.time.LocalDate
 import java.time.LocalTime
 
-
 internal fun dummyCardTransaction(): CardTransaction {
     return CardTransaction(
         registrationNumber = "214-23-12345",

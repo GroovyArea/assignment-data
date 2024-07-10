@@ -1,6 +1,5 @@
 package com.groovyarea.assignment.datatransfer.domain.service
 
-import com.groovyarea.assignment.datatransfer.domain.entity.table.DataTransferAgreement
 import com.groovyarea.assignment.datatransfer.infrastructure.db.jpa.CardTransactionRepository
 import com.groovyarea.assignment.datatransfer.stub.dummyCardTransaction
 import io.kotest.core.spec.style.BehaviorSpec
