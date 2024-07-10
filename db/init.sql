@@ -123,6 +123,9 @@ CREATE TABLE data_transfer_agreements
     updated_at              TIMESTAMP    NOT NULL
 ) ENGINE = InnoDB;
 
+ALTER TABLE data_transfer_agreements
+    ADD CONSTRAINT unique_registration_number UNIQUE (registration_number);
+
 INSERT INTO data_transfer_agreements (registration_number, data_transfer_agreed, data_transfer_agreed_at, created_at,
                                       updated_at)
 VALUES ('REG123', TRUE, '2024-07-01 12:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
