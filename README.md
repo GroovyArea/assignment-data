@@ -2,6 +2,17 @@
 
 ## 폴더 구조
 
+### cash-note module
+
+![img.png](image/cash-note-package.png)
+
+### data-receiver module
+
+![img_1.png](image/data-receiver-package.png)
+
+### data-transfer
+
+![img_2.png](image/data-transfer-package.png)
 
 ---
 
