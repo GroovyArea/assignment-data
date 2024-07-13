@@ -2,15 +2,18 @@ package com.groovyarea.assignment.datatransfer.infrastructure.http.community.cli
 
 import com.groovyarea.assignment.datatransfer.infrastructure.http.community.dto.request.CardTransactionRequest
 import com.groovyarea.assignment.datatransfer.infrastructure.http.community.dto.response.CommunityResponse
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.service.annotation.HttpExchange
-import org.springframework.web.service.annotation.PostExchange
 
-@HttpExchange
-interface CommunityClient {
+/**
+ * mock 공동체 API controller
+ */
+class MockCommunityController {
 
-    @PostExchange("/card-transactions")
+    @PostMapping("/card-transactions")
     fun sendCardTransactions(
         @RequestBody request: List<CardTransactionRequest>,
-    ): CommunityResponse<Nothing>
+    ): CommunityResponse<Nothing> {
+        return CommunityResponse()
+    }
 }
