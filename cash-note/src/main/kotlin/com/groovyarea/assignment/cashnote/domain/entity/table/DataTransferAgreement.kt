@@ -12,8 +12,8 @@ class DataTransferAgreement(
     @Column(name = "registration_number")
     val registrationNumber: String,
 
-    @Column(name = "is_data_transfer_agreed")
-    val isDataTransferAgreed: Boolean = true,
+    @Column(name = "data_transfer_agreed")
+    val ataTransferAgreed: Boolean = true,
 
     @Column(name = "data_transfer_agreed_at")
     var dataTransferAgreedAt: LocalDateTime = LocalDateTime.now(),

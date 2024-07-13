@@ -17,7 +17,6 @@ plugins {
 
 allprojects {
     apply(plugin = "io.gitlab.arturbosch.detekt")
-
     apply(plugin = "kotlin")
     apply(plugin = "kotlin-kapt")
     apply(plugin = "org.jetbrains.kotlin.jvm")

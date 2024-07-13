@@ -33,7 +33,7 @@ class ConnectionAgreementServiceTest : BehaviorSpec({
 
             val newConnectionAgreement = ConnectionAgreement(
                 registrationNumber = registrationNumber,
-                isConnectionAgreed = hasBusiness,
+                connectionAgreed = hasBusiness,
                 connectionAgreedAt = LocalDateTime.now()
             )
 
@@ -70,7 +70,7 @@ class ConnectionAgreementServiceTest : BehaviorSpec({
             )
 
             then("간편 연결 동의 Entity 의 동의 여부, 동의 날짜가 반영 된다.") {
-                connectionAgreement.isConnectionAgreed shouldBe true
+                connectionAgreement.connectionAgreed shouldBe true
                 connectionAgreement.connectionAgreedAt shouldNotBe null
             }
         }

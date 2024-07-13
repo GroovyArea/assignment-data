@@ -19,7 +19,7 @@ class CommunityClientService(
             registrationNumber = registrationNumber
         )
 
-        return response.result
+        return response.data?.result ?: false
     }
 
     override fun registerDataCommunication(

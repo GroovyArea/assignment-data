@@ -23,7 +23,7 @@ class DataTransferScheduler(
         private const val CARD_TRANSACTION_CHUNK_SIZE = 10
     }
 
-    @Scheduled(cron = "0 0 8 * * *")
+    @Scheduled(cron = "0 22 0 * * *")
     fun sendData() {
         var currentDataTransferAgreementPageNumber = 0
         var transferAbleFlag = true
@@ -42,39 +42,47 @@ class DataTransferScheduler(
                 } else {
                     currentDataTransferAgreementPageNumber = pagedDataTransferAgreements.nextPageNumber
 
-                    pagedDataTransferAgreements.contents.forEach { dataTransferAgreement ->
-                        val registrationNumber = dataTransferAgreement.registrationNumber
+                    pagedDataTransferAgreements.contents.asSequence()
+                        .filter { it.isNextDayOfAgreement() }
+                        .forEach { dataTransferAgreement ->
+                            val registrationNumber = dataTransferAgreement.registrationNumber
 
-                        val yesterdayCardTransactionsResult = runCatching {
-                            cardTransactionQueryService.getDayBeforeDatetimeCardTransactions(
-                                registrationNumber = registrationNumber,
-                                dayBeforeDatetime = dayBeforeDatetime
-                            )
-                        }
+                            val yesterdayCardTransactionsResult = runCatching {
+                                cardTransactionQueryService.getDayBeforeDatetimeCardTransactions(
+                                    registrationNumber = registrationNumber,
+                                    dayBeforeDatetime = dayBeforeDatetime
+                                )
+                            }
 
-                        yesterdayCardTransactionsResult.onSuccess { yesterdayCardTransactions ->
-                            yesterdayCardTransactions.chunked(CARD_TRANSACTION_CHUNK_SIZE).forEach { chunk ->
-                                val cardTransactionRequests = chunk.map { cardTransaction ->
-                                    CardTransactionMapper.INSTANCE.convertToRequest(
-                                        cardTransaction = cardTransaction
-                                    )
-                                }
-                                val sendTransactionResult = runCatching {
-                                    communityService.sendTransaction(
-                                        cardTransactionRequests = cardTransactionRequests
-                                    )
-                                }
+                            yesterdayCardTransactionsResult.onSuccess { yesterdayCardTransactions ->
+                                yesterdayCardTransactions.chunked(CARD_TRANSACTION_CHUNK_SIZE).forEach { chunk ->
+                                    val cardTransactionRequests = chunk.map { cardTransaction ->
+                                        CardTransactionMapper.INSTANCE.convertToRequest(
+                                            cardTransaction = cardTransaction
+                                        )
+                                    }
+                                    val sendTransactionResult = runCatching {
+                                        communityService.sendTransaction(
+                                            cardTransactionRequests = cardTransactionRequests
+                                        )
+                                    }
 
-                                sendTransactionResult.onFailure { e ->
-                                    logger.error("사업자 번호 $registrationNumber 의 매출 데이터 전송 중 에러 발생", e)
+                                    sendTransactionResult.onSuccess {
+                                        val lastCardTransactionNumber =
+                                            cardTransactionRequests.last().cardTransactionNumber
+                                        logger.info("전일 카드 데이터 송신 성공 | 마지막 송신 카드 번호 : $lastCardTransactionNumber")
+                                    }
+
+                                    sendTransactionResult.onFailure { e ->
+                                        logger.error("사업자 번호 $registrationNumber 의 매출 데이터 전송 중 에러 발생", e)
+                                    }
                                 }
                             }
-                        }
 
-                        yesterdayCardTransactionsResult.onFailure { e ->
-                            logger.error("사업자 번호 $registrationNumber 의 매출 데이터 조회 중 에러 발생", e)
+                            yesterdayCardTransactionsResult.onFailure { e ->
+                                logger.error("사업자 번호 $registrationNumber 의 매출 데이터 조회 중 에러 발생", e)
+                            }
                         }
-                    }
                 }
             }
 

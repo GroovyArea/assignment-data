@@ -13,7 +13,11 @@ spring:
 
 external:
   community:
-    url: ""
+    url: "http://127.0.0.1:8000"
+
+logging:
+  level:
+    web: debug
 
 springdoc:
   swagger-ui:
