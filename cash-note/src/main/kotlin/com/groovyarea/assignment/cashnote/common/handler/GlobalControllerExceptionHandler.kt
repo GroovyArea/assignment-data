@@ -52,6 +52,7 @@ class GlobalControllerExceptionHandler {
     )
     fun handleUnhandledException(error: Exception):
         ResponseEntity<ResponseDTO<Any>> {
+        error.printStackTrace()
         return createErrorResponse(statusCode = HttpStatus.INTERNAL_SERVER_ERROR, message = error.message)
     }
 

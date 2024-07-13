@@ -8,7 +8,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 @Entity
-@Table(name = "card_trasactions")
+@Table(name = "card_transactions")
 class CardTransaction(
 
     @Column(name = "registration_number")

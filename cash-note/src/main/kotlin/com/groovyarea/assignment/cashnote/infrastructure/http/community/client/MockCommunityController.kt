@@ -4,27 +4,38 @@ import com.groovyarea.assignment.cashnote.infrastructure.http.community.dto.requ
 import com.groovyarea.assignment.cashnote.infrastructure.http.community.dto.request.RegisterDataCommunicationRequest
 import com.groovyarea.assignment.cashnote.infrastructure.http.community.dto.response.CommunityResponse
 import com.groovyarea.assignment.cashnote.infrastructure.http.community.dto.response.HasBusinessResponse
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.service.annotation.GetExchange
-import org.springframework.web.service.annotation.HttpExchange
-import org.springframework.web.service.annotation.PostExchange
+import org.springframework.web.bind.annotation.RestController
 
-@HttpExchange
-interface CommunityClient {
+/**
+ * mock 공동체 API controller
+ */
+@RestController
+class MockCommunityController {
 
-    @GetExchange("/has-business")
+    @GetMapping
     fun hasBusiness(
         @RequestParam registrationNumber: String,
-    ): CommunityResponse<HasBusinessResponse>
+    ): CommunityResponse<HasBusinessResponse> {
+        return CommunityResponse(
+            data = HasBusinessResponse(true)
+        )
+    }
 
-    @PostExchange("/register-data-communication")
+    @PostMapping
     fun registerDataCommunication(
         @RequestBody request: RegisterDataCommunicationRequest,
-    ): CommunityResponse<Nothing>
+    ): CommunityResponse<Nothing> {
+        return CommunityResponse()
+    }
 
-    @PostExchange("/card-transactions")
+    @PostMapping("/card-transactions")
     fun sendCardTransactions(
         @RequestBody request: List<CardTransactionRequest>,
-    ): CommunityResponse<Nothing>
+    ): CommunityResponse<Nothing> {
+        return CommunityResponse()
+    }
 }

@@ -12,14 +12,14 @@ class ConnectionAgreement(
     @Column(name = "registration_number")
     val registrationNumber: String,
 
-    @Column(name = "is_connection_agreed")
-    var isConnectionAgreed: Boolean = false,
+    @Column(name = "connection_agreed")
+    var connectionAgreed: Boolean = false,
 
     @Column(name = "connection_agreed_at")
     var connectionAgreedAt: LocalDateTime? = null,
 ) : EntityBase() {
 
     fun isNotAgreed(): Boolean {
-        return !this.isConnectionAgreed
+        return !this.connectionAgreed
     }
 }

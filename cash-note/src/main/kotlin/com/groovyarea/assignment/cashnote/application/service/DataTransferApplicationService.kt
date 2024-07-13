@@ -4,7 +4,6 @@ import com.groovyarea.assignment.cashnote.application.service.community.Communit
 import com.groovyarea.assignment.cashnote.common.logback.Log
 import com.groovyarea.assignment.cashnote.domain.entity.table.CardTransaction
 import com.groovyarea.assignment.cashnote.domain.service.CardTransactionQueryService
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -27,11 +26,7 @@ class DataTransferApplicationService(
         private const val LOOP_TIMEOUT_MINUTE: Long = 10
     }
 
-    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
-        logger.error("과거 6개월 카드 데이터 송신 중 예외 발생", exception)
-    }
-
-    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO + coroutineExceptionHandler)
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     fun transferFirstData(
         registrationNumber: String,
@@ -78,7 +73,7 @@ class DataTransferApplicationService(
 
         result
             .onFailure { e ->
-                logger.error("카드 데이터 전송 중 오류 발생 | 사업자 번호 : $registrationNumber", e)
+                logger.error("과거 6개월 카드 데이터 송신 중 예외 발생 | 사업자 번호 : $registrationNumber", e)
                 coroutineScope.cancel("데이터 송신 종료")
             }
     }

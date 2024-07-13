@@ -51,7 +51,7 @@ class ConnectionAgreementService(
         return if (hasBusiness) {
             ConnectionAgreement(
                 registrationNumber = registrationNumber,
-                isConnectionAgreed = true,
+                connectionAgreed = true,
                 connectionAgreedAt = LocalDateTime.now()
             )
         } else {
