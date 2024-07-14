@@ -1,7 +1,7 @@
 package com.groovyarea.assignment.datatransfer.external.scheduler
 
 import com.groovyarea.assignment.datatransfer.common.logback.Log
-import com.groovyarea.assignment.datatransfer.domain.service.CardTransactionQueryService
+import com.groovyarea.assignment.datatransfer.domain.service.CardTransactionService
 import com.groovyarea.assignment.datatransfer.domain.service.DataTransferAgreementQueryService
 import com.groovyarea.assignment.datatransfer.external.mapper.CardTransactionMapper
 import com.groovyarea.assignment.datatransfer.external.service.CommunityService
@@ -15,7 +15,7 @@ import java.time.LocalDateTime
 @Component
 class DataTransferScheduler(
     private val dataTransferAgreementQueryService: DataTransferAgreementQueryService,
-    private val cardTransactionQueryService: CardTransactionQueryService,
+    private val cardTransactionService: CardTransactionService,
     private val communityService: CommunityService,
 ) {
 
@@ -48,35 +48,40 @@ class DataTransferScheduler(
                             val registrationNumber = dataTransferAgreement.registrationNumber
 
                             val yesterdayCardTransactionsResult = runCatching {
-                                cardTransactionQueryService.getDayBeforeDatetimeCardTransactions(
+                                cardTransactionService.getDayBeforeDatetimeCardTransactions(
                                     registrationNumber = registrationNumber,
                                     dayBeforeDatetime = dayBeforeDatetime
                                 )
                             }
 
                             yesterdayCardTransactionsResult.onSuccess { yesterdayCardTransactions ->
-                                yesterdayCardTransactions.chunked(CARD_TRANSACTION_CHUNK_SIZE).forEach { chunk ->
-                                    val cardTransactionRequests = chunk.map { cardTransaction ->
-                                        CardTransactionMapper.INSTANCE.convertToRequest(
-                                            cardTransaction = cardTransaction
-                                        )
-                                    }
-                                    val sendTransactionResult = runCatching {
-                                        communityService.sendTransaction(
-                                            cardTransactionRequests = cardTransactionRequests
-                                        )
-                                    }
+                                yesterdayCardTransactions.chunked(CARD_TRANSACTION_CHUNK_SIZE)
+                                    .forEach { chunkedCardTransactions ->
+                                        val cardTransactionRequests = chunkedCardTransactions.map { cardTransaction ->
+                                            CardTransactionMapper.INSTANCE.convertToRequest(
+                                                cardTransaction = cardTransaction
+                                            )
+                                        }
+                                        val sendTransactionResult = runCatching {
+                                            communityService.sendTransaction(
+                                                cardTransactionRequests = cardTransactionRequests
+                                            )
+                                        }
 
-                                    sendTransactionResult.onSuccess {
-                                        val lastCardTransactionNumber =
-                                            cardTransactionRequests.last().cardTransactionNumber
-                                        logger.info("전일 카드 데이터 송신 성공 | 마지막 송신 카드 번호 : $lastCardTransactionNumber")
-                                    }
+                                        sendTransactionResult.onSuccess {
+                                            val lastCardTransactionNumber =
+                                                cardTransactionRequests.last().cardTransactionNumber
+                                            logger.info("전일 카드 데이터 송신 성공 | 마지막 송신 카드 번호 : $lastCardTransactionNumber")
 
-                                    sendTransactionResult.onFailure { e ->
-                                        logger.error("사업자 번호 $registrationNumber 의 매출 데이터 전송 중 에러 발생", e)
+                                            cardTransactionService.dataTransferAll(
+                                                cardTransactions = chunkedCardTransactions
+                                            )
+                                        }
+
+                                        sendTransactionResult.onFailure { e ->
+                                            logger.error("사업자 번호 $registrationNumber 의 매출 데이터 전송 중 에러 발생", e)
+                                        }
                                     }
-                                }
                             }
 
                             yesterdayCardTransactionsResult.onFailure { e ->

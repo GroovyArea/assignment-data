@@ -15,11 +15,11 @@ import java.time.temporal.ChronoUnit
 private val repository = mockk<CardTransactionRepository>()
 
 @InjectMockKs
-private val cardTransactionQueryService = CardTransactionQueryService(
+private val cardTransactionService = CardTransactionService(
     cardTransactionRepository = repository
 )
 
-class CardTransactionQueryServiceTest : BehaviorSpec({
+class CardTransactionServiceTest : BehaviorSpec({
 
     given("특정 범위의 Card Data 를 페이징 처리하여, 쿼리하기 위해") {
         val currentPageNumber = 1
@@ -54,7 +54,7 @@ class CardTransactionQueryServiceTest : BehaviorSpec({
         } returns pageImpl
 
         `when`("함수를 호출하면") {
-            val getPagedCardTransaction = cardTransactionQueryService.getCardTransactionsBetween(
+            val getPagedCardTransaction = cardTransactionService.getCardTransactionsBetween(
                 currentPageNumber = currentPageNumber,
                 startDate = startDate,
                 endDate = endDate,

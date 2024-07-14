@@ -3,7 +3,7 @@ package com.groovyarea.assignment.cashnote.application.service
 import com.groovyarea.assignment.cashnote.application.service.community.CommunityService
 import com.groovyarea.assignment.cashnote.common.logback.Log
 import com.groovyarea.assignment.cashnote.domain.entity.table.CardTransaction
-import com.groovyarea.assignment.cashnote.domain.service.CardTransactionQueryService
+import com.groovyarea.assignment.cashnote.domain.service.CardTransactionService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -18,7 +18,7 @@ import java.time.temporal.ChronoUnit
 @Service
 class DataTransferApplicationService(
     private val communityService: CommunityService,
-    private val cardTransactionQueryService: CardTransactionQueryService,
+    private val cardTransactionService: CardTransactionService,
 ) {
 
     companion object : Log {
@@ -67,6 +67,12 @@ class DataTransferApplicationService(
                     logger.info(
                         "과거 6개월 카드 데이터 송신 성공 | 마지막 송신 카드 번호 : $lastCardTransactionNumber | 사업자 번호 : $registrationNumber"
                     )
+
+                    withContext(Dispatchers.IO) {
+                        dataTransferAll(
+                            cardTransactions = cardTransactions
+                        )
+                    }
                 }
             }
         }
@@ -83,7 +89,7 @@ class DataTransferApplicationService(
         startDate: LocalDateTime,
         endDate: LocalDateTime,
         registrationNumber: String,
-    ) = cardTransactionQueryService.getCardTransactionsBetween(
+    ) = cardTransactionService.getCardTransactionsBetween(
         currentPageNumber = currentCardTransactionPageNumber,
         startDate = startDate,
         endDate = endDate,
@@ -93,6 +99,12 @@ class DataTransferApplicationService(
     private suspend fun sendData(
         cardTransactions: List<CardTransaction>,
     ) = communityService.sendCardTransactions(
+        cardTransactions = cardTransactions
+    )
+
+    private suspend fun dataTransferAll(
+        cardTransactions: List<CardTransaction>,
+    ) = cardTransactionService.dataTransferAll(
         cardTransactions = cardTransactions
     )
 }

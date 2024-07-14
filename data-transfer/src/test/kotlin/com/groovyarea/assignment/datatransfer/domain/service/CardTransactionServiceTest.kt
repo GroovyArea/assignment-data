@@ -12,18 +12,18 @@ import java.time.LocalDateTime
 private val repository = mockk<CardTransactionRepository>()
 
 @InjectMockKs
-private val cardTransactionQueryService = CardTransactionQueryService(
+private val cardTransactionService = CardTransactionService(
     cardTransactionRepository = repository
 )
 
-class CardTransactionQueryServiceTest : BehaviorSpec({
+class CardTransactionServiceTest : BehaviorSpec({
 
     given("어제 카드 데이터를 조회하기 위해") {
         val registrationNumber = "214-23-12345"
         val dayBeforeDatetime = LocalDateTime.now().minusDays(1)
 
         every {
-            repository.findAllByRegistrationNumberAndCreatedAtGreaterThanEqual(
+            repository.findAllByRegistrationNumberAndDataTransferredIsFalseAndCreatedAtGreaterThanEqual(
                 registrationNumber = registrationNumber,
                 createdAt = dayBeforeDatetime
             )
@@ -32,7 +32,7 @@ class CardTransactionQueryServiceTest : BehaviorSpec({
         )
 
         `when`("함수를 호출하면") {
-            val dayBeforeDatetimeCardTransactions = cardTransactionQueryService.getDayBeforeDatetimeCardTransactions(
+            val dayBeforeDatetimeCardTransactions = cardTransactionService.getDayBeforeDatetimeCardTransactions(
                 registrationNumber = registrationNumber,
                 dayBeforeDatetime = dayBeforeDatetime
             )

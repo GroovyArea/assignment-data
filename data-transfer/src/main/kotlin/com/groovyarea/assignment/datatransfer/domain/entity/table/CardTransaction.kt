@@ -14,6 +14,9 @@ class CardTransaction(
     @Column(name = "registration_number")
     val registrationNumber: String,
 
+    @Column(name = "data_transferred")
+    var dataTransferred: Boolean = false,
+
     @Column(name = "card_transaction_number")
     val cardTransactionNumber: Int,
 
@@ -43,4 +46,9 @@ class CardTransaction(
 
     @Column(name = "quota")
     val quota: String,
-) : EntityBase()
+) : EntityBase() {
+
+    fun transfer() {
+        this.dataTransferred = true
+    }
+}

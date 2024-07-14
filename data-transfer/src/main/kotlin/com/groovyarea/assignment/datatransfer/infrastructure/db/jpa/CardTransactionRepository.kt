@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 
 interface CardTransactionRepository : JpaRepository<CardTransaction, ID> {
 
-    fun findAllByRegistrationNumberAndCreatedAtGreaterThanEqual(
+    fun findAllByRegistrationNumberAndDataTransferredIsFalseAndCreatedAtGreaterThanEqual(
         registrationNumber: String,
         createdAt: LocalDateTime,
     ): List<CardTransaction>
