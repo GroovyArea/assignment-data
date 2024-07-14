@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
-class CardTransactionQueryService(
+class CardTransactionService(
     private val cardTransactionRepository: CardTransactionRepository,
 ) {
 
@@ -17,11 +17,21 @@ class CardTransactionQueryService(
         dayBeforeDatetime: LocalDateTime,
     ): List<CardTransaction> {
         val cardTransactions =
-            cardTransactionRepository.findAllByRegistrationNumberAndCreatedAtGreaterThanEqual(
+            cardTransactionRepository.findAllByRegistrationNumberAndDataTransferredIsFalseAndCreatedAtGreaterThanEqual(
                 registrationNumber = registrationNumber,
                 createdAt = dayBeforeDatetime
             )
 
         return cardTransactions
+    }
+
+    @Transactional
+    fun dataTransferAll(
+        cardTransactions: List<CardTransaction>
+    ) {
+        cardTransactions.forEach {
+            it.transfer()
+        }
+        cardTransactionRepository.saveAll(cardTransactions)
     }
 }

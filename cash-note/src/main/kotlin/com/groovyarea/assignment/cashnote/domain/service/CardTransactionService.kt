@@ -2,12 +2,13 @@ package com.groovyarea.assignment.cashnote.domain.service
 
 import com.groovyarea.assignment.cashnote.common.pagination.PageDTO
 import com.groovyarea.assignment.cashnote.domain.dto.GetPagedCardTransaction
+import com.groovyarea.assignment.cashnote.domain.entity.table.CardTransaction
 import com.groovyarea.assignment.cashnote.infrastructure.db.jpa.repository.CardTransactionRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
-class CardTransactionQueryService(
+class CardTransactionService(
     private val cardTransactionRepository: CardTransactionRepository,
 ) {
 
@@ -39,5 +40,14 @@ class CardTransactionQueryService(
             nextPageNumber = nextPageNumber,
             contents = contents
         )
+    }
+
+    suspend fun dataTransferAll(
+        cardTransactions: List<CardTransaction>
+    ) {
+        cardTransactions.forEach {
+            it.transfer()
+        }
+        cardTransactionRepository.saveAll(cardTransactions)
     }
 }
