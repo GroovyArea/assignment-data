@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class MockCommunityController {
 
-    @GetMapping
+    @GetMapping("/has-business")
     fun hasBusiness(
         @RequestParam registrationNumber: String,
     ): CommunityResponse<HasBusinessResponse> {
@@ -25,7 +25,7 @@ class MockCommunityController {
         )
     }
 
-    @PostMapping
+    @PostMapping("/register-data-communication")
     fun registerDataCommunication(
         @RequestBody request: RegisterDataCommunicationRequest,
     ): CommunityResponse<Nothing> {

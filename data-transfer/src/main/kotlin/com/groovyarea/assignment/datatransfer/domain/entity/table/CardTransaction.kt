@@ -51,4 +51,6 @@ class CardTransaction(
     fun transfer() {
         this.dataTransferred = true
     }
+
+    fun isTransferred(): Boolean = this.dataTransferred
 }

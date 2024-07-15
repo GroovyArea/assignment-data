@@ -4,10 +4,12 @@ import com.groovyarea.assignment.datatransfer.infrastructure.http.community.dto.
 import com.groovyarea.assignment.datatransfer.infrastructure.http.community.dto.response.CommunityResponse
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RestController
 
 /**
  * mock 공동체 API controller
  */
+@RestController
 class MockCommunityController {
 
     @PostMapping("/card-transactions")

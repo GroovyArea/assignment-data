@@ -55,7 +55,9 @@ class DataTransferScheduler(
                             }
 
                             yesterdayCardTransactionsResult.onSuccess { yesterdayCardTransactions ->
-                                yesterdayCardTransactions.chunked(CARD_TRANSACTION_CHUNK_SIZE)
+                                yesterdayCardTransactions.asSequence()
+                                    .filterNot { it.isTransferred() }
+                                    .chunked(CARD_TRANSACTION_CHUNK_SIZE)
                                     .forEach { chunkedCardTransactions ->
                                         val cardTransactionRequests = chunkedCardTransactions.map { cardTransaction ->
                                             CardTransactionMapper.INSTANCE.convertToRequest(
