@@ -24,6 +24,6 @@ class DataTransferAgreement(
         val agreedDate = this.dataTransferAgreedAt.toLocalDate()
         val today = LocalDate.now()
 
-        return agreedDate.plusDays(1) == today
+        return agreedDate < today
     }
 }
