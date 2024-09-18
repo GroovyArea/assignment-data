@@ -1,8 +1,8 @@
-# Cash-Note 프로젝트 소개
+# 프로젝트 소개
 
 ## 폴더 구조
 
-### cash-note module
+### api module
 
 ![img.png](image/cash-note-package.png)
 
@@ -30,7 +30,7 @@
 
 ### card_transactions
 - 카드 결제 데이터 Table
-- 캐시 노트 내부 데이터 파이프라인을 통해 적재해 놓은 테이블이라 가정
+- 앱 내부 데이터 파이프라인을 통해 적재해 놓은 테이블이라 가정
 - 사업자의 카드 데이터임을 확인하기 위해 registration_number 컬럼 추가
 - registration_number 와 created_at 을 복합 인덱스로 설정
   - 카드 데이터 전송 시, 과거 6개월의 데이터를 조회하기 위해 사용
@@ -61,8 +61,8 @@
 
 ### 패키지 구성
 - 멀티 모듈 구성
-  - cash-note
-    - 캐시노트 클라이언트에 API 제공
+  - api
+    - 클라이언트에 API 제공
   - data-transfer
     - spring scheduler 이용한 데이터 전송 프로세스
   - data-receiver
@@ -99,7 +99,7 @@
 - App 내의 설정
 - 공통 DTO & Constant & Util 
 
-## 캐시 노트 API
+## API
 
 간편 연결 확인 동의 API
 - 공동체에 연결 확인 가능 API 동기 호출
